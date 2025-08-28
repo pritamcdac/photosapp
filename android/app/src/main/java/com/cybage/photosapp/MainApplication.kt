@@ -1,4 +1,4 @@
-package com.photosapp
+package com.cybage.photosapp
 
 import android.app.Application
 import com.facebook.react.PackageList
