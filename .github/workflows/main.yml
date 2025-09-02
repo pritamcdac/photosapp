@@ -47,7 +47,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build AAB
-        working-directory: android/app
+        working-directory: android
         run: ./gradlew bundleRelease
 
       - name: Upload to Play Console
