@@ -42,6 +42,11 @@ jobs:
           MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.ANDROID_KEY_ALIAS_PASSWORD }}
           EOF
 
+
+      - name: Make gradlew executable
+        working-directory: android
+        run: chmod +x gradlew
+
       - name: Build AAB
         working-directory: android
         run: ./gradlew --no-daemon bundleRelease
