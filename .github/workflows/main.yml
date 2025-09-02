@@ -44,7 +44,7 @@ jobs:
 
       - name: Build AAB
         working-directory: android
-        run: .\gradlew --no-daemon bundleRelease
+        run: ./gradlew --no-daemon bundleRelease
 
       - name: Upload to Play Console
         uses: r0adkll/upload-google-play@v1
