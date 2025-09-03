@@ -48,9 +48,6 @@ jobs:
       - name: Make gradlew executable
         working-directory: android
         run: chmod +x gradlew
-   
-      - name: Clean Gradle cache for build
-        run: ./gradlew clean
      
       - name: Debug keystore location
         run: |
