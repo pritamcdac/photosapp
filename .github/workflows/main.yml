@@ -42,15 +42,24 @@ jobs:
           MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}
           MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.ANDROID_KEY_ALIAS_PASSWORD }}
           EOF
+          cat gradle.properties
 
 
       - name: Make gradlew executable
         working-directory: android
         run: chmod +x gradlew
+   
+      - name: Clean Gradle cache for build
+        run: ./gradlew clean
+     
+      - name: Debug keystore location
+        run: |
+          echo "Looking for keystore..."
+          ls -R android/app | grep jks || echo "No keystore found"
 
       - name: Build AAB
         working-directory: android
-        run: ./gradlew bundleRelease
+        run: ./gradlew --no-build-cache bundleRelease
 
       - name: Upload to Play Console
         uses: r0adkll/upload-google-play@v1
