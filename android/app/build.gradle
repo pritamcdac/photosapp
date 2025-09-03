@@ -104,15 +104,15 @@ android {
     }
 
     buildTypes {
-        debug {
-            signingConfig signingConfigs.debug
-        }
-        release {
-            signingConfig signingConfigs.release
-            minifyEnabled enableProguardInReleaseBuilds
-            shrinkResources false
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-        }
+    debug {
+        signingConfig signingConfigs.debug
+    }
+    release {
+        // REMOVE this 👇 so Gradle won’t look for a keystore
+        // signingConfig signingConfigs.release
+        minifyEnabled enableProguardInReleaseBuilds
+        shrinkResources false
+        proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
     }
 }
 
