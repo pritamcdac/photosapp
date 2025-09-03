@@ -94,13 +94,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
-        release {
-            // Values come from gradle.properties
-            storeFile file(MYAPP_UPLOAD_STORE_FILE)
-            storePassword MYAPP_UPLOAD_STORE_PASSWORD
-            keyAlias MYAPP_UPLOAD_KEY_ALIAS
-            keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-        }
+      release {
+    storeFile file("$projectDir/${MYAPP_UPLOAD_STORE_FILE}")
+    storePassword MYAPP_UPLOAD_STORE_PASSWORD
+    keyAlias MYAPP_UPLOAD_KEY_ALIAS
+    keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+}
     }
 
     buildTypes {
