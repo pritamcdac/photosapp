@@ -29,7 +29,9 @@ jobs:
 
       - name: Decode Keystore
         run: |
+          mkdir -p android/app
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+          ls -l android/app/
           
       - name: Configure Gradle signing
         working-directory: android
