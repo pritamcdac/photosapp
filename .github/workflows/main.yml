@@ -27,46 +27,36 @@ jobs:
       - name: Install JS deps
         run: npm install
 
+      # 🔑 Decode keystore
       - name: Decode Keystore
-        run: |
-          mkdir -p android/app
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
-          ls -l android/app/
-          
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+
+      # 🔑 Configure Gradle signing
       - name: Configure Gradle signing
         working-directory: android
         run: |
-          cat >> gradle.properties <<'EOF'
-          MYAPP_UPLOAD_STORE_FILE=app/upload-keystore.jks
-          MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}
-          MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.ANDROID_KEY_ALIAS_PASSWORD }}
-          EOF
+          echo "MYAPP_UPLOAD_STORE_FILE=app/upload-keystore.jks" >> gradle.properties
+          echo "MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> gradle.properties
+          echo "MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}" >> gradle.properties
+          echo "MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.ANDROID_KEY_ALIAS_PASSWORD }}" >> gradle.properties
           cat gradle.properties
-
 
       - name: Make gradlew executable
         working-directory: android
         run: chmod +x gradlew
      
-      - name: Debug keystore location
-        run: |
-          echo "Looking for keystore..."
-          ls -R android/app | grep jks || echo "No keystore found"
-
       - name: Build AAB
-        # working-directory: android
-        # run: ./gradlew --no-build-cache bundleRelease
         run: cd android && ./gradlew bundleRelease --stacktrace
 
       - name: Upload to Play Console
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
-          packageName: com.cybage.photosapp   # ✅ Use same bundle ID as iOS
+          packageName: com.cybage.photosapp
           releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
           track: internal
           status: draft
+
 
   ios:
     name: iOS Build & Upload
