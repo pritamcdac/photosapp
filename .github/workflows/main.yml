@@ -55,8 +55,9 @@ jobs:
           ls -R android/app | grep jks || echo "No keystore found"
 
       - name: Build AAB
-        working-directory: android
-        run: ./gradlew --no-build-cache bundleRelease
+        # working-directory: android
+        # run: ./gradlew --no-build-cache bundleRelease
+        run: cd android && ./gradlew bundleRelease --stacktrace
 
       - name: Upload to Play Console
         uses: r0adkll/upload-google-play@v1
