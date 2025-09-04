@@ -1,4 +1,4 @@
-name: Mobile CI/CD
+name: Mobile CI/CD.
 
 on:
   push:
