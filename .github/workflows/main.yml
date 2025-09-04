@@ -93,9 +93,15 @@ jobs:
       
       - name: 🔍 List schemes
         run: xcodebuild -list -workspace ios/PhotosApp.xcworkspace
+ 
+      - name: 📃 Install provisioning profile
+        run: |
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          echo "${{ secrets.IOS_PROVISIONING_PROFILE }}" | base64 --decode > "$HOME/Library/MobileDevice/Provisioning Profiles/CybageCI.mobileprovision"
 
-      - name: 🔍 Show provisioning profile details
-        run: security cms -D -i "$HOME/Library/MobileDevice/Provisioning Profiles/CybageCI.mobileprovision"
+
+      - name: 🔍 List code‑signing identities (debug)
+        run: security find-identity -v -p codesigning
 
 
       - name: 📦 Archive iOS app
