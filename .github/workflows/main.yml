@@ -35,7 +35,7 @@ jobs:
       - name: Configure Gradle signing
         working-directory: android
         run: |
-          echo "MYAPP_UPLOAD_STORE_FILE=app/upload-keystore.jks" >> gradle.properties
+          echo "MYAPP_UPLOAD_STORE_FILE=upload-keystore.jks" >> gradle.properties
           echo "MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> gradle.properties
           echo "MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}" >> gradle.properties
           echo "MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.ANDROID_KEY_ALIAS_PASSWORD }}" >> gradle.properties
