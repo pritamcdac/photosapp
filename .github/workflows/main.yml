@@ -112,10 +112,12 @@ jobs:
          -configuration Release \
          -archivePath $PWD/build/PhotosApp.xcarchive \
          -destination "generic/platform=iOS" \
-         clean archive \
-         DEVELOPMENT_TEAM=*** \
-         PROVISIONING_PROFILE_SPECIFIER="CybageCI" \
-         CODE_SIGN_IDENTITY="Apple Distribution"
+         CODE_SIGN_STYLE=Manual \
+         DEVELOPMENT_TEAM=VB78Y67GX6 \
+         PROVISIONING_PROFILE_SPECIFIER=CybageCI \
+         CODE_SIGN_IDENTITY="Apple Distribution: CYBAGE SOFTWARE, INC. (VB78Y67GX6)" \
+         OTHER_CODE_SIGN_FLAGS="--keychain /Users/runner/Library/Keychains/login.keychain-db" \
+         archive
 
       - name: Export IPA
         run: |
