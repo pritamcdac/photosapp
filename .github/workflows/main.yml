@@ -60,7 +60,7 @@ jobs:
 
   ios:
     name: iOS Build & Upload
-    runs-on: macos-latest
+    runs-on: macos-14
     # needs: android
 
     steps:
