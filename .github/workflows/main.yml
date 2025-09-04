@@ -71,6 +71,15 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
            xcode-version: '16.0'
+     
+      - name: 📦 Install JS dependencies
+        run: npm install
+     
+      - name: 📦 Set up CocoaPods and build
+        run: |
+         cd ios
+         rm -rf Pods Podfile.lock
+         pod install
 
       - name: Install Dependencies
         run: |
