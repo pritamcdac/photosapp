@@ -91,17 +91,18 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           echo "${{ secrets.PROVISIONING_PROFILE }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/CybageCI.mobileprovision
 
-      - name: Build iOS Archive
+      - name: 📦 Archive iOS app
         run: |
-          xcodebuild \
-            -workspace ios/PhotosApp.xcworkspace \
-            -scheme PhotosApp \
-            -configuration Release \
-            -archivePath $PWD/build/PhotosApp.xcarchive \
-            clean archive \
-            DEVELOPMENT_TEAM=${{ secrets.APPLE_TEAM_ID }} \
-            PROVISIONING_PROFILE_SPECIFIER="CybageCI" \
-            CODE_SIGN_IDENTITY="Apple Distribution"
+         xcodebuild \
+         -workspace ios/PhotosApp.xcworkspace \
+         -scheme PhotosApp \
+         -configuration Release \
+         -archivePath $PWD/build/PhotosApp.xcarchive \
+         -destination "generic/platform=iOS" \
+         clean archive \
+         DEVELOPMENT_TEAM=*** \
+         PROVISIONING_PROFILE_SPECIFIER="CybageCI" \
+         CODE_SIGN_IDENTITY="Apple Distribution"
 
       - name: Export IPA
         run: |
