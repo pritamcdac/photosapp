@@ -90,6 +90,13 @@ jobs:
         run: |
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           echo "${{ secrets.PROVISIONING_PROFILE }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/CybageCI.mobileprovision
+      
+      - name: 🔍 List schemes
+        run: xcodebuild -list -workspace ios/PhotosApp.xcworkspace
+
+      - name: 🔍 Show provisioning profile details
+        run: security cms -D -i "$HOME/Library/MobileDevice/Provisioning Profiles/CybageCI.mobileprovision"
+
 
       - name: 📦 Archive iOS app
         run: |
