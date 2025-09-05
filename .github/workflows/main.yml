@@ -197,6 +197,14 @@ jobs:
           plutil -p ios/PhotosApp/Info.plist | grep CFBundleIdentifier
           grep PRODUCT_BUNDLE_IDENTIFIER ios/PhotosApp.xcodeproj/project.pbxproj
 
+
+      - name: 🔢 Bump build number
+        run: |
+          build_number=$((GITHUB_RUN_NUMBER + 5))
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $build_number" ios/PhotosApp/Info.plist
+          echo "Updated build number to $build_number"
+          plutil -p ios/PhotosApp/Info.plist | grep CFBundleVersion
+
       - name: 📦 Archive iOS app
         run: |
          xcodebuild \
