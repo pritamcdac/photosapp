@@ -205,18 +205,19 @@ jobs:
           echo "Updated build number to $build_number"
           plutil -p ios/PhotosApp/Info.plist | grep CFBundleVersion
 
-      # - name: 📦 Archive iOS app
-      #   run: |
-      #    xcodebuild \
-      #    -workspace ios/PhotosApp.xcworkspace \
-      #    -scheme PhotosApp \
-      #    -configuration Release \
-      #    -archivePath $PWD/build/PhotosApp.xcarchive archive \
-      #    -destination "generic/platform=iOS" \
-      #    CODE_SIGN_STYLE=Manual \
-      #    DEVELOPMENT_TEAM=VB78Y67GX6 \
-      #    PROVISIONING_PROFILE_SPECIFIER=CybageCI \
-      #    CODE_SIGN_IDENTITY="Apple Distribution: CYBAGE SOFTWARE, INC. (VB78Y67GX6)" \
+
+      - name: 📦 Archive iOS app
+        run: |
+         xcodebuild \
+         -workspace ios/PhotosApp.xcworkspace \
+         -scheme PhotosApp \
+         -configuration Release \
+         -archivePath $PWD/build/PhotosApp.xcarchive archive \
+         -destination "generic/platform=iOS" \
+         CODE_SIGN_STYLE=Manual \
+         DEVELOPMENT_TEAM=VB78Y67GX6 \
+         PROVISIONING_PROFILE_SPECIFIER=CybageCI \
+         CODE_SIGN_IDENTITY="Apple Distribution: CYBAGE SOFTWARE, INC. (VB78Y67GX6)" \
          
 
       - name: Export IPA
@@ -225,6 +226,7 @@ jobs:
             -archivePath $PWD/build/PhotosApp.xcarchive \
             -exportOptionsPlist ios/ExportOptions.plist \
             -exportPath $PWD/build
+
 
       - name: Upload to TestFlight
         uses: apple-actions/upload-testflight-build@v1
