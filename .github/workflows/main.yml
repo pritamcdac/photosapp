@@ -75,35 +75,82 @@ jobs:
       - name: 📦 Install JS dependencies
         run: npm install
      
-      - name: 📦 Set up CocoaPods and build
-        run: |
-         cd ios
-         rm -rf Pods Podfile.lock
-         pod install
+      # - name: 📦 Set up CocoaPods and build
+      #   run: |
+      #    cd ios
+      #    rm -rf Pods Podfile.lock
+      #    pod install
 
-      - name: Install Dependencies
-        run: |
-          cd ios
-          pod install --repo-update
+      # - name: Install Dependencies
+      #   run: |
+      #     cd ios
+      #     pod install --repo-update
 
-      - name: Decode Provisioning Profile
-        run: |
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          echo "${{ secrets.PROVISIONING_PROFILE }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/CybageCI.mobileprovision
+      # - name: Decode Provisioning Profile
+      #   run: |
+      #     mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+      #     echo "${{ secrets.PROVISIONING_PROFILE }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/CybageCI.mobileprovision
       
-      - name: 🔍 List schemes
-        run: xcodebuild -list -workspace ios/PhotosApp.xcworkspace
+      # - name: 🔍 List schemes
+      #   run: xcodebuild -list -workspace ios/PhotosApp.xcworkspace
  
+      # - name: 📃 Install provisioning profile
+      #   run: |
+      #     mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+      #     echo "${{ secrets.IOS_PROVISIONING_PROFILE }}" | base64 --decode > "$HOME/Library/MobileDevice/Provisioning Profiles/CybageCI.mobileprovision"
+
+
+      # - name: 🔍 List code‑signing identities (debug)
+      #   run: security find-identity -v -p codesigning
+
+
+
+      # - name: 📝 Generate ExportOptions.plist
+      #   run: |
+      #     cat > ios/ExportOptions.plist <<'EOF'
+      #     <?xml version="1.0" encoding="UTF-8"?>
+      #     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      #     <plist version="1.0">
+      #       <dict>
+      #         <key>method</key>
+      #         <string>app-store</string>
+      #         <key>teamID</key>
+      #         <string>VB78Y67GX6</string>
+      #         <key>provisioningProfiles</key>
+      #         <dict>
+      #           <key>com.cybage.alm</key>
+      #           <string>CybageCI</string>
+      #         </dict>
+      #         <key>signingStyle</key>
+      #         <string>manual</string>
+      #         <key>stripSwiftSymbols</key>
+      #         <true/>
+      #         <key>compileBitcode</key>
+      #         <true/>
+      #         <key>destination</key>
+      #         <string>export</string>
+      #       </dict>
+      #     </plist>
+      #     EOF
+
+      - name: 🔑 Decode and import iOS certificate
+        run: |
+          echo "${{ secrets.IOS_CERTIFICATE_P12 }}" | base64 --decode > /tmp/certificate.p12
+          security create-keychain -p "password" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "password" build.keychain
+          security set-keychain-settings -lut 21600 build.keychain
+          security import /tmp/certificate.p12 -k build.keychain -P "${{ secrets.IOS_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign -A
+          security list-keychains -s build.keychain login.keychain
+          security set-key-partition-list -S apple-tool:,apple: -s -k "password" build.keychain
+          
       - name: 📃 Install provisioning profile
         run: |
           mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
           echo "${{ secrets.IOS_PROVISIONING_PROFILE }}" | base64 --decode > "$HOME/Library/MobileDevice/Provisioning Profiles/CybageCI.mobileprovision"
 
-
       - name: 🔍 List code‑signing identities (debug)
         run: security find-identity -v -p codesigning
-
-
 
       - name: 📝 Generate ExportOptions.plist
         run: |
@@ -132,6 +179,12 @@ jobs:
             </dict>
           </plist>
           EOF
+     
+      - name: 📦 Set up CocoaPods and build
+        run: |
+               cd ios
+               rm -rf Pods Podfile.lock
+               pod install
 
 
       - name: 📦 Archive iOS app
