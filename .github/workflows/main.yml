@@ -135,7 +135,7 @@ jobs:
 
       - name: 🔑 Decode and import iOS certificate
         run: |
-          echo "${{ secrets.IOS_CERTIFICATE_P12 }}" | base64 --decode > /tmp/certificate.p12
+          echo "${{ secrets.IOS_CERTIFICATE }}" | base64 --decode > /tmp/certificate.p12
           security create-keychain -p "password" build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p "password" build.keychain
