@@ -179,13 +179,23 @@ jobs:
             </dict>
           </plist>
           EOF
+
+    
+      - name: Clean Xcode Derived Data
+        run: |
+         rm -rf ~/Library/Developer/Xcode/DerivedData/*
+         rm -rf ios/build
      
       - name: 📦 Set up CocoaPods and build
         run: |
                cd ios
                rm -rf Pods Podfile.lock
                pod install
-
+    
+      - name: Print bundle identifiers
+        run: |
+          plutil -p ios/PhotosApp/Info.plist | grep CFBundleIdentifier
+          grep PRODUCT_BUNDLE_IDENTIFIER ios/PhotosApp.xcodeproj/project.pbxproj
 
       - name: 📦 Archive iOS app
         run: |
