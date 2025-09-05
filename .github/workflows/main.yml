@@ -104,6 +104,36 @@ jobs:
         run: security find-identity -v -p codesigning
 
 
+
+      - name: 📝 Generate ExportOptions.plist
+        run: |
+          cat > ios/ExportOptions.plist <<'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+            <dict>
+              <key>method</key>
+              <string>app-store</string>
+              <key>teamID</key>
+              <string>VB78Y67GX6</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                <key>com.cybage.alm</key>
+                <string>CybageCI</string>
+              </dict>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>stripSwiftSymbols</key>
+              <true/>
+              <key>compileBitcode</key>
+              <true/>
+              <key>destination</key>
+              <string>export</string>
+            </dict>
+          </plist>
+          EOF
+
+
       - name: 📦 Archive iOS app
         run: |
          # xcodebuild \
