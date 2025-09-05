@@ -193,7 +193,7 @@ jobs:
          -workspace ios/PhotosApp.xcworkspace \
          -scheme PhotosApp \
          -configuration Release \
-         -archivePath $PWD/build/PhotosApp.xcarchive \
+         -archivePath $PWD/build/PhotosApp.xcarchive archive \
          -destination "generic/platform=iOS" \
          CODE_SIGN_STYLE=Manual \
          DEVELOPMENT_TEAM=VB78Y67GX6 \
