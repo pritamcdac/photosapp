@@ -188,9 +188,9 @@ jobs:
      
       - name: 📦 Set up CocoaPods and build
         run: |
-               cd ios
-               rm -rf Pods Podfile.lock
-               pod install
+             cd ios
+             rm -rf Pods Podfile.lock
+             pod install --repo-update
     
       - name: Print bundle identifiers
         run: |
