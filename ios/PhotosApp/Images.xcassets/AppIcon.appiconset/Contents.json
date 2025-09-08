@@ -1,4 +1,5 @@
 {
+  "images": [
     {
       "idiom": "iphone",
       "scale": "2x",
@@ -9,13 +10,7 @@
       "idiom": "ios-marketing",
       "scale": "1x",
       "size": "1024x1024",
-      "filename": "icon-1024.png",
-      "appearances": [
-        {
-          "appearance": "any",
-          "value": "any"
-        }
-      ]
+      "filename": "icon-1024.png"
     }
   ],
   "info": {
