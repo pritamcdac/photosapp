@@ -48,7 +48,7 @@
       "filename": "icon-1024(1).png",
       "appearances": [
         {
-          "appearance": "luminosity",
+          "appearance": "any",
           "value": "any"
         }
       ]
