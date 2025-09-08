@@ -6,62 +6,62 @@ on:
   workflow_dispatch:
 
 jobs:
-  # android:
-  #   name: Android Release
-  #   runs-on: ubuntu-latest
+  android:
+    name: Android Release
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-  #     - name: Setup JDK 17
-  #       uses: actions/setup-java@v4
-  #       with:
-  #         distribution: 'temurin'
-  #         java-version: 17
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
 
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '18'
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
-  #     - name: Install JS deps
-  #       run: npm install
+      - name: Install JS deps
+        run: npm install
 
-  #     # 🔑 Decode keystore
-  #     - name: Decode Keystore
-  #       run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+      # 🔑 Decode keystore
+      - name: Decode Keystore
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
 
-  #     # 🔑 Configure Gradle signing
-  #     - name: Configure Gradle signing
-  #       working-directory: android
-  #       run: |
-  #         echo "MYAPP_UPLOAD_STORE_FILE=upload-keystore.jks" >> gradle.properties
-  #         echo "MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> gradle.properties
-  #         echo "MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}" >> gradle.properties
-  #         echo "MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.ANDROID_KEY_ALIAS_PASSWORD }}" >> gradle.properties
-  #         cat gradle.properties
+      # 🔑 Configure Gradle signing
+      - name: Configure Gradle signing
+        working-directory: android
+        run: |
+          echo "MYAPP_UPLOAD_STORE_FILE=upload-keystore.jks" >> gradle.properties
+          echo "MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> gradle.properties
+          echo "MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}" >> gradle.properties
+          echo "MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.ANDROID_KEY_ALIAS_PASSWORD }}" >> gradle.properties
+          cat gradle.properties
 
-  #     - name: Make gradlew executable
-  #       working-directory: android
-  #       run: chmod +x gradlew
+      - name: Make gradlew executable
+        working-directory: android
+        run: chmod +x gradlew
      
-  #     - name: Build AAB
-  #       run: cd android && ./gradlew bundleRelease --stacktrace
+      - name: Build AAB
+        run: cd android && ./gradlew bundleRelease --stacktrace
 
-  #     - name: Upload to Play Console
-  #       uses: r0adkll/upload-google-play@v1
-  #       with:
-  #         serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
-  #         packageName: com.cybage.photosapp
-  #         releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
-  #         track: internal
-  #         status: draft
+      - name: Upload to Play Console
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.cybage.photosapp
+          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
+          track: internal
+          status: draft
 
 
   ios:
     name: iOS Build & Upload
     runs-on: macos-14
-    # needs: android
+    needs: android
 
     steps:
       - name: Checkout repository
@@ -75,64 +75,7 @@ jobs:
       - name: 📦 Install JS dependencies
         run: npm install
      
-      # - name: 📦 Set up CocoaPods and build
-      #   run: |
-      #    cd ios
-      #    rm -rf Pods Podfile.lock
-      #    pod install
-
-      # - name: Install Dependencies
-      #   run: |
-      #     cd ios
-      #     pod install --repo-update
-
-      # - name: Decode Provisioning Profile
-      #   run: |
-      #     mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-      #     echo "${{ secrets.PROVISIONING_PROFILE }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/CybageCI.mobileprovision
-      
-      # - name: 🔍 List schemes
-      #   run: xcodebuild -list -workspace ios/PhotosApp.xcworkspace
- 
-      # - name: 📃 Install provisioning profile
-      #   run: |
-      #     mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
-      #     echo "${{ secrets.IOS_PROVISIONING_PROFILE }}" | base64 --decode > "$HOME/Library/MobileDevice/Provisioning Profiles/CybageCI.mobileprovision"
-
-
-      # - name: 🔍 List code‑signing identities (debug)
-      #   run: security find-identity -v -p codesigning
-
-
-
-      # - name: 📝 Generate ExportOptions.plist
-      #   run: |
-      #     cat > ios/ExportOptions.plist <<'EOF'
-      #     <?xml version="1.0" encoding="UTF-8"?>
-      #     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      #     <plist version="1.0">
-      #       <dict>
-      #         <key>method</key>
-      #         <string>app-store</string>
-      #         <key>teamID</key>
-      #         <string>VB78Y67GX6</string>
-      #         <key>provisioningProfiles</key>
-      #         <dict>
-      #           <key>com.cybage.alm</key>
-      #           <string>CybageCI</string>
-      #         </dict>
-      #         <key>signingStyle</key>
-      #         <string>manual</string>
-      #         <key>stripSwiftSymbols</key>
-      #         <true/>
-      #         <key>compileBitcode</key>
-      #         <true/>
-      #         <key>destination</key>
-      #         <string>export</string>
-      #       </dict>
-      #     </plist>
-      #     EOF
-
+    
       - name: 🔑 Decode and import iOS certificate
         run: |
           echo "${{ secrets.IOS_CERTIFICATE }}" | base64 --decode > /tmp/certificate.p12
